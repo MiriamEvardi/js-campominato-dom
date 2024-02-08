@@ -138,7 +138,7 @@ function showEndGameScreen(result) {
     if (result == "win") {
 
         paragraph.innerText = `Hai vinto!
-        Il tuo punteggio è: ${score}`
+        Il tuo punteggio è: ${score + 1}`
         endGameScreen.style.backgroundColor = "#8e05ff86";
     } else {
 
