@@ -1,3 +1,14 @@
+const buttonElementGrid = document.getElementById("start");
+const difficultySelect = document.getElementById("difficulty");
+const gridElement = document.querySelector("#grid");
+const endGameScreen = document.getElementById("game-over");
+const scoreElement = document.getElementById("score");
+
+//booleano che determina la fine della partita impostato su false
+let gameEnded = false;
+let bombPositions;
+let score = 0;
+
 // seleziona difficoltà e crea riquadri in base alla difficoltà scelta
 function setDifficult() {
 
@@ -26,7 +37,7 @@ function setDifficult() {
 function createBombs(maxBombs) {
 
     //creo l'array vuoto dove andrò a pushare i numeri random
-    let bombPositions = [];
+    bombPositions = [];
     //numero di bombe che ci devono essere
     const bombsNumber = 16;
 
@@ -44,8 +55,6 @@ function createBombs(maxBombs) {
 }
 
 
-//booleano che determina la fine della partita impostato su false
-let gameEnded = false;
 
 
 //creo i riquadri e li inserisco nella griglia
@@ -66,6 +75,14 @@ function createGrid(totalSquares, bombPositions) {
         gridElement.append(newElement);
 
 
+        if (bombPositions.includes(i + 1)) {
+
+            newElement.classList.add("notSafe");
+
+        }
+
+
+
         //al click, i riquadri si colorano
         newElement.addEventListener('click',
             function () {
@@ -82,10 +99,15 @@ function createGrid(totalSquares, bombPositions) {
 
                         //fine partita (l'utente non può cliccare)
                         gameEnded = true;
+                        showEndGameScreen("lose");
 
                     } else {
                         // Se non c'è la bomba, il colore del riquadro diventa azzurro
                         this.classList.add("safe");
+                        winCheck();
+                        score++;
+                        scoreElement.innerText = score;
+
                     }
                 }
             }
@@ -94,10 +116,51 @@ function createGrid(totalSquares, bombPositions) {
 }
 
 
+function showEndGameScreen(result) {
 
-const buttonElementGrid = document.getElementById("start");
-const difficultySelect = document.getElementById("difficulty");
-const gridElement = document.querySelector("#grid");
+    endGameScreen.classList.remove("d-none");
+
+    if (result == "win") {
+
+        endGameScreen.innerText = `Hai vinto!
+        Il tuo punteggio è: ${score}`
+        endGameScreen.style.backgroundColor = "blue";
+    } else {
+
+        endGameScreen.innerText = `Game Over.
+         Il tuo punteggio è: ${score}`
+        endGameScreen.style.backgroundColor = "red";
+
+    }
+}
+
+
+function winCheck() {
+
+    const allCells = document.querySelectorAll(".square");
+
+    let win = true;
+
+    for (let i = 0; i < allCells.length; i++) {
+
+        if (!allCells[i].classList.contains("safe") && !allCells[i].classList.contains("notSafe")) {
+
+            win = false;
+        }
+    }
+
+    if (win) {
+        gameEnded = true;
+        showEndGameScreen("win")
+    }
+
+}
+
+
+
+
+
+
 
 
 buttonElementGrid.addEventListener('click',
@@ -129,6 +192,3 @@ buttonElementGrid.addEventListener('click',
     }
 )
 
-//In seguito l'utente clicca su una cella: se il numero è presente nella lista dei numeri generati -
-//abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina. Altrimenti la cella cliccata si colora di azzurro
-//e l'utente può continuare a cliccare sulle altre celle.
