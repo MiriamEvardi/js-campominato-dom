@@ -22,8 +22,34 @@ function setDifficult() {
 }
 
 
+//funzione che mi crea le 16 bombe casuali
+function createBombs(maxBombs) {
+
+    //creo l'array vuoto dove andrò a pushare i numeri random
+    let bombPositions = [];
+    //numero di bombe che ci devono essere
+    const bombsNumber = 16;
+
+
+    //ciclo che mi crea numeri random finchè non raggiunge il numero di bombsNumber
+    while (bombPositions.length < bombsNumber) {
+        const randomNumber = Math.floor(Math.random() * maxBombs) + 1;
+
+        //push nell'array vuoto
+        if (!bombPositions.includes(randomNumber)) {
+            bombPositions.push(randomNumber);
+        }
+    }
+    return bombPositions;
+}
+
+
+//booleano che determina la fine della partita impostato su false
+let gameEnded = false;
+
+
 //creo i riquadri e li inserisco nella griglia
-function createGrid(totalSquares) {
+function createGrid(totalSquares, bombPositions) {
 
 
     //creo n div
@@ -39,39 +65,34 @@ function createGrid(totalSquares) {
         //li inserisco nella griglia
         gridElement.append(newElement);
 
+
         //al click, i riquadri si colorano
         newElement.addEventListener('click',
             function () {
-                this.classList.add("active");
 
-                console.log(this.innerText);
+
+                if (!gameEnded) {
+
+                    // Controlla se il numero del riquadro è presente nella lista delle posizioni delle bombe
+                    if (bombPositions.includes(parseInt(this.innerText))) {
+
+                        // Se c'è la bomba, il colore della casella diventa rosso
+                        this.classList.add("bomb");
+                        console.log("Hai calpestato una bomba! Partita terminata.");
+
+                        //fine partita (l'utente non può cliccare)
+                        gameEnded = true;
+
+                    } else {
+                        // Se non c'è la bomba, il colore del riquadro diventa azzurro
+                        this.classList.add("safe");
+                    }
+                }
             }
         )
     }
 }
 
-
-
-//funzione che mi crea le 16 bombe casuali
-function createBombs(maxBombs) {
-
-    //numero di bombe che ci devono essere
-    const bombsNumber = 16;
-
-    //creo l'array vuoto dove andrò a pushare i numeri random
-    let bombPositions = [];
-
-    //ciclo che mi crea numeri random finchè non raggiunge il numero di bombsNumber
-    while (bombPositions.length < bombsNumber) {
-        const randomNumber = Math.floor(Math.random() * maxBombs) + 1;
-
-        //push nell'array vuoto
-        if (!bombPositions.includes(randomNumber)) {
-            bombPositions.push(randomNumber);
-        }
-    }
-    return bombPositions;
-}
 
 
 const buttonElementGrid = document.getElementById("start");
@@ -97,20 +118,17 @@ buttonElementGrid.addEventListener('click',
 
         let bombPositions = createBombs(maxBombs);
 
+
         // Resetta la griglia
         gridElement.innerHTML = '';
 
         // Genera le caselle della griglia
-        createGrid(totalSquares);
+        createGrid(totalSquares, bombPositions);
 
         console.log("Bomb Positions:", bombPositions);
     }
 )
 
-
-//Il computer deve generare 16 numeri casuali e inserirli in un array,
-// in base al range della difficoltà prescelta
-//(se abbiamo scelto facile l'array conterrà numeri casuali da 1 a 100, se invece abbiamo scelto difficile l'array dovrà contenerne da 1 a 49):
-//questi rappreseranno le posizioni delle nostre bombe.
-//Attenzione: nella stessa cella può essere posizionata al massimo una bomba, perciò nell’array delle bombe non potranno esserci due numeri uguali.
-
+//In seguito l'utente clicca su una cella: se il numero è presente nella lista dei numeri generati -
+//abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina. Altrimenti la cella cliccata si colora di azzurro
+//e l'utente può continuare a cliccare sulle altre celle.
