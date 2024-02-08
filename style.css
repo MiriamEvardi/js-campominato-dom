@@ -1,0 +1,228 @@
+.grid-container {
+    min-width: 1000px;
+    padding: 100px 0;
+
+    overflow: auto;
+    display: flex;
+}
+
+
+nav {
+    background-color: #9a4fba3a;
+    width: 100%;
+    height: 100px;
+}
+
+#difficulty {
+    background-color: #2b1c37;
+}
+
+#grid {
+    display: flex;
+    width: 1000px;
+    height: 1000px;
+    flex-flow: row wrap;
+    justify-content: center;
+
+
+}
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: solid 1px white;
+
+    user-select: none;
+
+}
+
+.square.active {
+    background-color: rgb(196, 133, 255);
+}
+
+.form-select {
+    min-width: 100px;
+    width: 10%;
+}
+
+#grid.hard .square {
+    width: calc(100% / 10);
+    height: calc(100% / 10);
+}
+
+#grid.medium .square {
+    width: calc(100% / 9);
+    height: calc(100% / 9);
+}
+
+#grid.easy .square {
+    width: calc(100% / 7);
+    height: calc(100% / 7);
+}
+
+
+
+
+
+/* Styled Button */
+button {
+    position: relative;
+    margin: 0;
+    padding: 0.8em 1em;
+    outline: none;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    background-color: #2b1c37;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 300;
+    font-size: 18px;
+    font-family: inherit;
+    z-index: 0;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.02, 0.01, 0.47, 1);
+}
+
+button:hover {
+    animation: sh0 0.5s ease-in-out both;
+}
+
+@keyframes sh0 {
+    0% {
+        transform: rotate(0deg) translate3d(0, 0, 0);
+    }
+
+    25% {
+        transform: rotate(7deg) translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: rotate(-7deg) translate3d(0, 0, 0);
+    }
+
+    75% {
+        transform: rotate(1deg) translate3d(0, 0, 0);
+    }
+
+    100% {
+        transform: rotate(0deg) translate3d(0, 0, 0);
+    }
+}
+
+button:hover span {
+    animation: storm 0.7s ease-in-out both;
+    animation-delay: 0.06s;
+}
+
+button::before,
+button::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0;
+    transition: transform 0.15s cubic-bezier(0.02, 0.01, 0.47, 1), opacity 0.15s cubic-bezier(0.02, 0.01, 0.47, 1);
+    z-index: -1;
+    transform: translate(100%, -25%) translate3d(0, 0, 0);
+}
+
+button:hover::before,
+button:hover::after {
+    opacity: 0.15;
+    transition: transform 0.2s cubic-bezier(0.02, 0.01, 0.47, 1), opacity 0.2s cubic-bezier(0.02, 0.01, 0.47, 1);
+}
+
+button:hover::before {
+    transform: translate3d(50%, 0, 0) scale(0.9);
+}
+
+button:hover::after {
+    transform: translate(50%, 0) scale(1.1);
+}
+
+
+
+
+:root {
+    --background: #060608;
+    --color: #FAFAFA;
+}
+
+.stack {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.stack span {
+    font-weight: bold;
+    grid-row-start: 1;
+    grid-column-start: 1;
+    font-size: 4rem;
+    --stack-height: calc(100% / var(--stacks) - 1px);
+    --inverse-index: calc(calc(var(--stacks) - 1) - var(--index));
+    --clip-top: calc(var(--stack-height) * var(--index));
+    --clip-bottom: calc(var(--stack-height) * var(--inverse-index));
+    clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
+    animation: stack 340ms cubic-bezier(.46, .29, 0, 1.24) 1 backwards calc(var(--index) * 120ms), glitch 2s ease infinite 2s alternate-reverse;
+}
+
+.stack span:nth-child(odd) {
+    --glitch-translate: 8px;
+}
+
+.stack span:nth-child(even) {
+    --glitch-translate: -8px;
+}
+
+@keyframes stack {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%);
+        text-shadow: -2px 3px 0 red, 2px -3px 0 blue;
+    }
+
+    ;
+
+    60% {
+        opacity: 0.5;
+        transform: translateX(50%);
+    }
+
+    80% {
+        transform: none;
+        opacity: 1;
+        text-shadow: 2px -3px 0 red, -2px 3px 0 blue;
+    }
+
+    100% {
+        text-shadow: none;
+    }
+}
+
+@keyframes glitch {
+    0% {
+        text-shadow: -2px 3px 0 red, 2px -3px 0 blue;
+        transform: translate(var(--glitch-translate));
+    }
+
+    2% {
+        text-shadow: 2px -3px 0 red, -2px 3px 0 blue;
+    }
+
+    4%,
+    100% {
+        text-shadow: none;
+        transform: none;
+    }
+}
