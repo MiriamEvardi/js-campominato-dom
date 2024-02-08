@@ -63,17 +63,16 @@ nav {
 }
 
 .bomb {
-    background-color: red;
+    background-color: rgb(56, 14, 62);
 }
 
 .safe {
-    background-color: lightblue;
+    background-color: rgb(188, 84, 245);
 }
 
 #game-over {
     width: 500px;
     height: 500px;
-    background-color: #2b1c37;
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;

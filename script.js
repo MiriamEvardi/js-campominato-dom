@@ -101,6 +101,19 @@ function createGrid(totalSquares, bombPositions) {
                         gameEnded = true;
                         showEndGameScreen("lose");
 
+
+                        const allCells = document.querySelectorAll(".square");
+
+                        for (let i = 0; i < allCells.length; i++) {
+
+                            if (allCells[i].classList.contains("notSafe")) {
+                                allCells[i].classList.add("bomb");
+
+                            }
+                        }
+
+
+
                     } else {
                         // Se non c'è la bomba, il colore del riquadro diventa azzurro
                         this.classList.add("safe");
@@ -117,19 +130,21 @@ function createGrid(totalSquares, bombPositions) {
 
 
 function showEndGameScreen(result) {
-
+    const paragraph = endGameScreen.querySelector("p");
     endGameScreen.classList.remove("d-none");
+    document.getElementById("reload").addEventListener('click',
+        () => { location.reload() })
 
     if (result == "win") {
 
-        endGameScreen.innerText = `Hai vinto!
+        paragraph.innerText = `Hai vinto!
         Il tuo punteggio è: ${score}`
-        endGameScreen.style.backgroundColor = "blue";
+        endGameScreen.style.backgroundColor = "#8e05ff86";
     } else {
 
-        endGameScreen.innerText = `Game Over.
+        paragraph.innerText = `Game Over.
          Il tuo punteggio è: ${score}`
-        endGameScreen.style.backgroundColor = "red";
+        endGameScreen.style.backgroundColor = "#1400247b";
 
     }
 }
@@ -155,11 +170,6 @@ function winCheck() {
     }
 
 }
-
-
-
-
-
 
 
 
